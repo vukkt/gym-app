@@ -1,0 +1,15 @@
+{
+  "name": "Gym XYZ",
+  "short_name": "Gym XYZ",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48 72x72 96x96 128x128 256x256",
+      "type": "image/x-icon"
+    }
+  ],
+  "theme_color": "#0051ff",
+  "background_color": "#ffffff"
+}
