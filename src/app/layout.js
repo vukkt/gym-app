@@ -2,6 +2,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Script from 'next/script';
+import Analytics from '@/components/Analytics';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -20,22 +21,36 @@ export const metadata = {
     images: '/og-home.jpg',
   },
   twitter: { card: 'summary_large_image', site: '@GymXYZ' },
-
-  /* ---------- NEW ---------- */
-  icons: {
-    icon: '/favicon.ico', // serves <link rel="icon" …>
-    // optional extras:
-    // shortcut: '/favicon-32x32.png',
-    // apple: '/apple-touch-icon.png',
-  },
-  manifest: '/site.webmanifest', // serves <link rel="manifest" …>
+  icons: { icon: '/favicon.ico' },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-sans antialiased">
+        {/* GA4 */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script
+          id="ga4-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { page_path: window.location.pathname });
+            `,
+          }}
+        />
+
+        {/* Site-wide UI */}
         <Navbar />
+        {children}
+        <Analytics />
 
         {/* JSON-LD business schema */}
         <Script
@@ -58,8 +73,6 @@ export default function RootLayout({ children }) {
             }),
           }}
         />
-
-        {children}
       </body>
     </html>
   );

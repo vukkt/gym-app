@@ -28,7 +28,14 @@ export default function ContactForm() {
       body: JSON.stringify(data),
     });
 
-    if (res.ok) reset();
+    if (res.ok) {
+      gaEvent({
+        action: 'send_message_submitted',
+        category: 'Form',
+        label: 'Contact',
+      });
+      reset();
+    }
   }
 
   return (

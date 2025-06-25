@@ -1,3 +1,4 @@
+'use client';
 import Button from './Button';
 
 export default function PricingCard({ name, blurb, price, isPopular = false }) {
@@ -15,7 +16,13 @@ export default function PricingCard({ name, blurb, price, isPopular = false }) {
         <span className="text-sm text-gray-500"> /mo</span>
       </div>
 
-      <Button href="#contact" className="block mx-auto w-fit mt-4">
+      <Button
+        href="#contact"
+        className="block mx-auto w-fit mt-4"
+        onClick={() =>
+          gaEvent({ action: 'join_now_clicked', category: 'CTA', label: name })
+        }
+      >
         Join&nbsp;Now
       </Button>
     </article>

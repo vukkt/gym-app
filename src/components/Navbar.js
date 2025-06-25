@@ -44,7 +44,7 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:block">
-          <Button href="/#classes">Book Class</Button>
+          <Button href="/book">Book Class</Button>
         </div>
 
         {/* Mobile hamburger */}
@@ -93,7 +93,7 @@ export default function Navbar() {
             ))}
 
             <Button
-              href="/#classes"
+              href="/book"
               className="mt-4"
               onClick={() => setOpen(false)}
             >
