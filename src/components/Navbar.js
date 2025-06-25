@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Button from './Button';
 import Container from './Container';
@@ -15,14 +15,25 @@ const navLinks = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Prevent body scroll when mobile menu is open
-  if (typeof window !== 'undefined') {
+  useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
-  }
+  }, [open]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 4);
+    onScroll(); // run once on load
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
+    <header
+      className={`sticky top-0 z-50 bg-white transition-shadow ${
+        scrolled ? 'shadow-md' : 'shadow-sm'
+      }`}
+    >
       <Container className="flex items-center justify-between h-16">
         {/* Logo */}
         <Link href="/" className="text-xl font-extrabold text-brand-600">
@@ -51,7 +62,7 @@ export default function Navbar() {
         <button
           aria-label="Toggle menu"
           className="md:hidden flex items-center"
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen((v) => !v)}
         >
           <svg
             className="w-6 h-6 text-brand-600"
