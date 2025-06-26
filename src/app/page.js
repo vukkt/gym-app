@@ -5,6 +5,7 @@ import AboutSection from '@/components/sections/AboutSection';
 import ClassesSection from '@/components/sections/ClassesSection';
 import MembershipSection from '@/components/sections/MembershipSection';
 import ContactSection from '@/components/sections/ContactSection';
+import TestimonialsSection from '@/components/sections/TestimonialsSection';
 
 export const metadata = {
   title: 'Gym XYZ – Train Hard. Feel Powerful.',
@@ -30,6 +31,7 @@ export default function Home() {
 
       <AboutSection />
       <ClassesSection />
+      <TestimonialsSection />
       <MembershipSection />
       <ContactSection />
     </>

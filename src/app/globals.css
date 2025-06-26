@@ -9,3 +9,50 @@ html {
 .reveal--active {
   @apply opacity-100 translate-y-0;
 }
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  } /* duplicated track makes this seamless */
+}
+
+.animate-scroll-left {
+  animation: scroll-left 40s linear infinite;
+}
+
+/* stronger, transparent fades (uses gray-50 background) */
+.fade-edge-left {
+  background: linear-gradient(
+    to right,
+    rgba(249, 250, 251, 1) 0%,
+    rgba(249, 250, 251, 0.8) 20%,
+    rgba(249, 250, 251, 0) 80%
+  );
+}
+.fade-edge-right {
+  background: linear-gradient(
+    to left,
+    rgba(249, 250, 251, 1) 0%,
+    rgba(249, 250, 251, 0.8) 20%,
+    rgba(249, 250, 251, 0) 80%
+  );
+}
+.mask-fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+}
