@@ -6,7 +6,7 @@ import ClassesSection from '@/components/sections/ClassesSection';
 import MembershipSection from '@/components/sections/MembershipSection';
 import ContactSection from '@/components/sections/ContactSection';
 import TestimonialsSection from '@/components/sections/TestimonialsSection';
-
+import TeamSection from '@/components/sections/TeamSection';
 export const metadata = {
   title: 'Gym XYZ – Train Hard. Feel Powerful.',
   description:
@@ -30,6 +30,7 @@ export default function Home() {
       </Section>
 
       <AboutSection />
+      <TeamSection />
       <ClassesSection />
       <TestimonialsSection />
       <MembershipSection />

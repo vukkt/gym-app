@@ -22,7 +22,7 @@ const classes = [
 
 export default function ClassesSection() {
   return (
-    <Section id="classes" className="bg-gray-50 scroll-mt-20">
+    <Section id="classes" className="scroll-mt-20">
       {/* Heading fade-in */}
       <Reveal>
         <div className="text-center mb-12">
