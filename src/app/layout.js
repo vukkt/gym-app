@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Script from 'next/script';
 import Analytics from '@/components/Analytics';
+import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -51,7 +52,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         {children}
         <Analytics />
-
+        <Footer />
         {/* JSON-LD business schema */}
         <Script
           id="ld-localbusiness"

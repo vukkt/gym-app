@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Button from './Button';
 import Container from './Container';
+import HeroCTA from '@/components/HeroCTA';
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -55,7 +56,7 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:block">
-          <Button href="/book">Book Class</Button>
+          <HeroCTA />
         </div>
 
         {/* Mobile hamburger */}
@@ -103,13 +104,10 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <Button
-              href="/book"
+            <HeroCTA
               className="mt-4"
-              onClick={() => setOpen(false)}
-            >
-              Book Class
-            </Button>
+              onClick={() => setOpen(false)} /* closes menu after click */
+            />
           </nav>
         </div>
       )}

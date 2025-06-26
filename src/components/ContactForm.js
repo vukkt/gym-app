@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from './Button';
+import { gaEvent } from '@/app/lib/gtag';
 
 const schema = z.object({
   name: z.string().min(2, 'Name too short'),
@@ -40,12 +41,12 @@ export default function ContactForm() {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 text-left max-w-md mx-auto"
       noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col gap-4 text-left max-w-md mx-auto h-80"
     >
       {/* Name */}
-      <div>
+      <div className="flex-shrink-0">
         <input
           {...register('name')}
           type="text"
@@ -59,7 +60,7 @@ export default function ContactForm() {
       </div>
 
       {/* Email */}
-      <div>
+      <div className="flex-shrink-0">
         <input
           {...register('email')}
           type="email"
@@ -75,12 +76,11 @@ export default function ContactForm() {
       </div>
 
       {/* Message */}
-      <div>
+      <div className="flex-1 flex flex-col">
         <textarea
           {...register('message')}
-          rows="4"
           placeholder="How can we help?"
-          className="w-full rounded-xl border px-4 py-3"
+          className="w-full flex-1 rounded-xl border px-4 py-3 resize-none"
           aria-invalid={errors.message ? 'true' : 'false'}
         />
         {errors.message && (
@@ -90,19 +90,18 @@ export default function ContactForm() {
         )}
       </div>
 
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        className="block mx-auto w-fit"
-      >
-        {isSubmitting ? 'Sending…' : 'Send Message'}
-      </Button>
+      {/* Submit */}
+      <div className="flex-shrink-0 flex flex-col items-center">
+        <Button type="submit" disabled={isSubmitting} className="w-fit">
+          {isSubmitting ? 'Sending…' : 'Send Message'}
+        </Button>
 
-      {isSubmitSuccessful && (
-        <p className="text-success-500 text-center">
-          Thanks! We’ll reply soon.
-        </p>
-      )}
+        {isSubmitSuccessful && (
+          <p className="text-success-500 text-center">
+            Thanks! We&nbsp;will reply soon.
+          </p>
+        )}
+      </div>
     </form>
   );
 }

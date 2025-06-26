@@ -25,7 +25,6 @@ export default function Home() {
           <p className="max-w-xl mx-auto text-lg opacity-90">
             Group classes & personal coaching designed to push your limits.
           </p>
-          <HeroCTA />
         </div>
       </Section>
 
