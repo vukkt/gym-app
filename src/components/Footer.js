@@ -11,17 +11,19 @@ export default function Footer() {
             href="https://facebook.com/yourgym"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Facebook"
             className="opacity-80 hover:opacity-100 transition-opacity"
           >
-            <Icon name="facebook" className="h-5 w-5" />
+            <Icon name="facebook" size={20} />
           </a>
           <a
             href="https://instagram.com/yourgym"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Instagram"
             className="opacity-80 hover:opacity-100 transition-opacity"
           >
-            <Icon name="instagram" className="h-5 w-5" />
+            <Icon name="instagram" size={20} />
           </a>
         </div>
       </div>

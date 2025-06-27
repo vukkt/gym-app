@@ -18,6 +18,7 @@ export default function ContactSection() {
                 loading="lazy"
                 width="100%"
                 height="100%"
+                title="Gym XYZ location map"
                 style={{ border: 0 }}
                 allowFullScreen
                 referrerPolicy="no-referrer-when-downgrade"
