@@ -56,44 +56,47 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop actions */}
+        {/* ───── Desktop actions ───── */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
           <HeroCTA />
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          aria-label="Toggle menu"
-          aria-expanded={open}
-          className="md:hidden flex items-center"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <svg
-            className="w-6 h-6 text-brand-600"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
+        {/* ───── Mobile actions: theme + menu ───── */}
+        <div className="md:hidden flex items-center gap-4">
+          <ThemeToggle />
+          <button
+            aria-label="Toggle menu"
+            aria-expanded={open}
+            className="flex items-center"
+            onClick={() => setOpen((v) => !v)}
           >
-            {open ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
+            <svg
+              className="w-6 h-6 text-brand-600"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              {open ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
       </Container>
 
-      {/* Mobile panel */}
+      {/* ───── Mobile drawer ───── */}
       {open && (
         <div
           role="dialog"
@@ -102,10 +105,6 @@ export default function Navbar() {
           className="md:hidden bg-white dark:bg-gray-800 shadow-inner"
         >
           <nav className="flex flex-col gap-4 p-6">
-            <div className="flex justify-end">
-              <ThemeToggle onClick={() => setOpen(false)} />
-            </div>
-
             {navLinks.map(({ label, href }) => (
               <Link
                 key={href}
