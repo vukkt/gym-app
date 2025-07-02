@@ -9,6 +9,7 @@ import { ToastProvider } from '@/components/ToastProvider';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata = {
+  metadataBase: new URL('https://gym-app-prod.vercel.app'),
   title: {
     default: 'Gym XYZ – Train Hard. Feel Powerful.',
     template: '%s | Gym XYZ',
