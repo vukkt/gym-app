@@ -32,9 +32,12 @@ const testimonials = [
 
 export default function TestimonialsSection() {
   return (
-    <Section id="testimonials" className="bg-gray-50 scroll-mt-20">
+    <Section
+      id="testimonials"
+      className="bg-gray-50 dark:bg-gray-800 scroll-mt-20"
+    >
       <Reveal>
-        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
           Client Highlights
         </h2>
       </Reveal>

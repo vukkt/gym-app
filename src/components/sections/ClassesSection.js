@@ -23,14 +23,14 @@ const classes = [
 export default function ClassesSection() {
   return (
     <Section id="classes" className="scroll-mt-20">
-      {/* Heading fade-in */}
       <Reveal>
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900">Classes</h2>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            Classes
+          </h2>
         </div>
       </Reveal>
 
-      {/* Grid fade-in */}
       <Reveal>
         <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {classes.map((c, idx) => (

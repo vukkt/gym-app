@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Button from './Button';
 import Container from './Container';
 import HeroCTA from '@/components/HeroCTA';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -18,22 +18,24 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  /* lock body scroll when drawer open */
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
   }, [open]);
 
+  /* shadow after scrolling */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4);
-    onScroll(); // run once on load
+    onScroll();
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-white transition-shadow ${
+      className={`sticky top-0 z-50 transition-shadow ${
         scrolled ? 'shadow-md' : 'shadow-sm'
-      }`}
+      } bg-white dark:bg-gray-800`}
     >
       <Container className="flex items-center justify-between h-16">
         {/* Logo */}
@@ -47,21 +49,23 @@ export default function Navbar() {
             <Link
               key={href}
               href={href}
-              className="text-sm font-medium text-gray-700 hover:text-brand-600"
+              className="text-sm font-medium text-gray-700 hover:text-brand-600 dark:text-gray-300"
             >
               {label}
             </Link>
           ))}
         </nav>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:block">
+        {/* Desktop actions */}
+        <div className="hidden md:flex items-center gap-4">
+          <ThemeToggle />
           <HeroCTA />
         </div>
 
         {/* Mobile hamburger */}
         <button
           aria-label="Toggle menu"
+          aria-expanded={open}
           className="md:hidden flex items-center"
           onClick={() => setOpen((v) => !v)}
         >
@@ -89,25 +93,31 @@ export default function Navbar() {
         </button>
       </Container>
 
-      {/* Mobile slide-down panel */}
+      {/* Mobile panel */}
       {open && (
-        <div className="md:hidden bg-white shadow-inner">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+          className="md:hidden bg-white dark:bg-gray-800 shadow-inner"
+        >
           <nav className="flex flex-col gap-4 p-6">
+            <div className="flex justify-end">
+              <ThemeToggle onClick={() => setOpen(false)} />
+            </div>
+
             {navLinks.map(({ label, href }) => (
               <Link
                 key={href}
                 href={href}
-                className="text-lg font-medium text-gray-700"
+                className="text-lg font-medium text-gray-700 dark:text-gray-200"
                 onClick={() => setOpen(false)}
               >
                 {label}
               </Link>
             ))}
 
-            <HeroCTA
-              className="mt-4"
-              onClick={() => setOpen(false)} /* closes menu after click */
-            />
+            <HeroCTA className="mt-4" onClick={() => setOpen(false)} />
           </nav>
         </div>
       )}

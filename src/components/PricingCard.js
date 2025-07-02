@@ -1,15 +1,21 @@
 'use client';
 import Button from './Button';
 
-export default function PricingCard({ name, blurb, price, isPopular = false }) {
+export default function PricingCard({
+  name,
+  blurb,
+  price,
+  isPopular = false,
+  className = '',
+}) {
   return (
     <article
       className={`flex flex-col rounded-2xl border p-8 shadow-sm ${
         isPopular ? 'border-brand-500 ring-2 ring-brand-500' : 'border-gray-200'
-      }`}
+      } ${className}`}
     >
       <h3 className="text-xl font-semibold mb-2">{name}</h3>
-      <p className="text-sm text-gray-600 flex-1">{blurb}</p>
+      <p className="text-sm text-gray-600 flex-1 mb-4">{blurb}</p>
 
       <div className="my-6">
         <span className="text-4xl font-extrabold">${price}</span>
@@ -18,7 +24,7 @@ export default function PricingCard({ name, blurb, price, isPopular = false }) {
 
       <Button
         href="#contact"
-        className="block mx-auto w-fit mt-4"
+        className="block mx-auto w-fit mt-auto"
         onClick={() =>
           gaEvent({ action: 'join_now_clicked', category: 'CTA', label: name })
         }

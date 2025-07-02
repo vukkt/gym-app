@@ -4,12 +4,12 @@ import ContactForm from '@/components/ContactForm';
 
 export default function ContactSection() {
   return (
-    <Section id="contact" className="bg-brand-50 scroll-mt-20">
+    <Section id="contact" className="bg-brand-50 dark:bg-gray-800 scroll-mt-20">
       <Reveal>
         <div className="mx-auto max-w-5xl grid gap-10 lg:grid-cols-2 items-start">
           {/* ───────── Left: Map ───────── */}
-          <div className="space-y-6  text-center">
-            <h2 className="text-3xl font-bold text-gray-900">
+          <div className="space-y-6 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
               Where to Find&nbsp;Us
             </h2>
 
@@ -29,7 +29,9 @@ export default function ContactSection() {
 
           {/* ───────── Right: Form ───────── */}
           <div className="space-y-6 text-center">
-            <h2 className="text-3xl font-bold text-gray-900">Get in Touch</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+              Get in Touch
+            </h2>
             {/* lift the form 1 rem on large screens */}
             <div className="lg:-mt-4">
               <ContactForm />

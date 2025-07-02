@@ -6,6 +6,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  @apply bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200;
+}
+
 .reveal--active {
   @apply opacity-100 translate-y-0;
 }

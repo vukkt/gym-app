@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Script from 'next/script';
 import Analytics from '@/components/Analytics';
 import Footer from '@/components/Footer';
+import { ToastProvider } from '@/components/ToastProvider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -47,12 +48,17 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
+        <Script
+          src="https://assets.calendly.com/assets/external/widget.js"
+          strategy="afterInteractive"
+        />
+        <ToastProvider>
+          <Navbar />
+          {children}
+          <Analytics />
+          <Footer />
+        </ToastProvider>
 
-        {/* Site-wide UI */}
-        <Navbar />
-        {children}
-        <Analytics />
-        <Footer />
         {/* JSON-LD business schema */}
         <Script
           id="ld-localbusiness"
