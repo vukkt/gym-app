@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Container from './Container';
 import HeroCTA from '@/components/HeroCTA';
 import ThemeToggle from '@/components/ThemeToggle';
+import FocusTrap from '@/components/FocusTrap'; // ← NEW
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -56,13 +57,13 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* ───── Desktop actions ───── */}
+        {/* Desktop actions */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
           <HeroCTA />
         </div>
 
-        {/* ───── Mobile actions: theme + menu ───── */}
+        {/* Mobile actions: theme + menu */}
         <div className="md:hidden flex items-center gap-4">
           <ThemeToggle />
           <button
@@ -96,7 +97,7 @@ export default function Navbar() {
         </div>
       </Container>
 
-      {/* ───── Mobile drawer ───── */}
+      {/* Mobile drawer */}
       {open && (
         <div
           role="dialog"
@@ -104,20 +105,22 @@ export default function Navbar() {
           aria-label="Mobile navigation"
           className="md:hidden bg-white dark:bg-gray-800 shadow-inner"
         >
-          <nav className="flex flex-col gap-4 p-6">
-            {navLinks.map(({ label, href }) => (
-              <Link
-                key={href}
-                href={href}
-                className="text-lg font-medium text-gray-700 dark:text-gray-200"
-                onClick={() => setOpen(false)}
-              >
-                {label}
-              </Link>
-            ))}
+          <FocusTrap isActive={open}>
+            <nav className="flex flex-col gap-4 p-6">
+              {navLinks.map(({ label, href }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="text-lg font-medium text-gray-700 dark:text-gray-200"
+                  onClick={() => setOpen(false)}
+                >
+                  {label}
+                </Link>
+              ))}
 
-            <HeroCTA className="mt-4" onClick={() => setOpen(false)} />
-          </nav>
+              <HeroCTA className="mt-4" onClick={() => setOpen(false)} />
+            </nav>
+          </FocusTrap>
         </div>
       )}
     </header>
