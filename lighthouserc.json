@@ -1,9 +1,11 @@
 {
   "ci": {
     "collect": {
-      "url": ["http://localhost:3000/"],
-      "startServerCommand": "pnpm build && pnpm start -p 3000",
-      "startServerReadyPattern": "Ready in",
+      "url": ["https://gym-app-prod.vercel.app/"],
+
+      "startServerCommand": "",
+      "startServerReadyPattern": "",
+
       "numberOfRuns": 1
     },
     "assert": {

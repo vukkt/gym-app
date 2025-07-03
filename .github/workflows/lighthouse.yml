@@ -1,29 +1,6 @@
-name: Lighthouse CI
+# install deps
+- run: pnpm install --no-frozen-lockfile
 
-on:
-  pull_request:
-  push:
-    branches: [main, dev]
-
-jobs:
-  lhci:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'pnpm'
-
-      # install deps without strict lockfile check
-      - run: pnpm install --no-frozen-lockfile
-
-      # one-shot Lighthouse run (no devDep added)
-      - name: Run Lighthouse CI
-        run: pnpm dlx @lhci/cli@0.13.x autorun --config=./lighthouserc.json
+# run LHCI directly against prod URL
+- name: Run Lighthouse CI
+  run: pnpm dlx @lhci/cli@0.13.x autorun --config=./lighthouserc.json
