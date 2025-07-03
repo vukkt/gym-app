@@ -12,18 +12,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Set up pnpm + Node 18
       - uses: pnpm/action-setup@v2
         with:
           version: 8
+
       - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'pnpm'
 
+      # install deps without strict lockfile check
       - run: pnpm install --no-frozen-lockfile
-      - run: pnpm add -D @lhci/cli
 
-      # Run LHCI with the config above
+      # one-shot Lighthouse run (no devDep added)
       - name: Run Lighthouse CI
-        run: npx lhci autorun --config=./lighthouserc.json
+        run: pnpm dlx @lhci/cli@0.13.x autorun --config=./lighthouserc.json
