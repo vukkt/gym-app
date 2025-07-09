@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from './Button';
-import { gaEvent } from '@/app/lib/gtag';
+import { gaEvent } from '@/lib/gtag';
 
 const schema = z.object({
   name: z.string().min(2, 'Name too short'),

@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/components/Button';
-import { gaEvent } from '@/app/lib/gtag';
+import { gaEvent } from '@/lib/gtag';
 /**
  * Reusable CTA that fires GA4 event.
  * Forwards any extra props (className, onClick, etc.).
