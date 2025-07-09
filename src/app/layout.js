@@ -5,6 +5,7 @@ import Script from 'next/script';
 import Analytics from '@/components/Analytics';
 import Footer from '@/components/Footer';
 import { ToastProvider } from '@/components/ToastProvider';
+import PageTransition from '@/components/PageTransition';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -55,7 +56,7 @@ export default function RootLayout({ children }) {
         />
         <ToastProvider>
           <Navbar />
-          {children}
+          <PageTransition>{children}</PageTransition>
           <Analytics />
           <Footer />
         </ToastProvider>
