@@ -55,5 +55,8 @@
     "*.{json,md,css}": [
       "prettier --write"
     ]
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }
