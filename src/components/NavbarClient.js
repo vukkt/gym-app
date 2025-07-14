@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { SessionProvider, useSession, signIn, signOut } from 'next-auth/react';
 
 import Container from './Container';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -17,7 +17,7 @@ const navLinks = [
   { label: 'Contact', href: '/#contact' },
 ];
 
-export default function Navbar() {
+export default function NavbarClient({ initialSession }) {
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -35,8 +35,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* ---------------- render ---------------- */
-  return (
+  /* ---------- UI ---------- */
+  const navbar = (
     <header
       className={`sticky top-0 z-50 transition-shadow ${
         scrolled ? 'shadow-md' : 'shadow-sm'
@@ -61,7 +61,7 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* ───── Desktop actions ───── */}
+        {/* Desktop actions */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
 
@@ -89,7 +89,7 @@ export default function Navbar() {
           <HeroCTA />
         </div>
 
-        {/* ───── Mobile actions: theme + menu ───── */}
+        {/* Mobile actions: theme + menu */}
         <div className="md:hidden flex items-center gap-4">
           <ThemeToggle />
           <button
@@ -123,7 +123,7 @@ export default function Navbar() {
         </div>
       </Container>
 
-      {/* ───── Mobile drawer ───── */}
+      {/* Mobile drawer */}
       {open && (
         <div
           role="dialog"
@@ -174,4 +174,7 @@ export default function Navbar() {
       )}
     </header>
   );
+
+  /* Provide initialSession so SSR HTML already has correct state */
+  return <SessionProvider session={initialSession}>{navbar}</SessionProvider>;
 }
