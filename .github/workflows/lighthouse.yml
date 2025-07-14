@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ───────── pnpm + Node 18 ─────────
+      # pnpm + Node
       - uses: pnpm/action-setup@v2
         with:
           version: 8
@@ -22,15 +22,25 @@ jobs:
           node-version: 18
           cache: 'pnpm'
 
-      # Install deps (no strict lockfile check)
+      # ───────── Install ─────────
       - run: pnpm install --no-frozen-lockfile
 
-      # Build the production bundle
+      # ───────── Build ─────────
       - run: pnpm build
 
-      # Start Next in prod mode on port 3000 (background)
-      - run: pnpm start -p 3000 &
+      # ───────── Serve in prod mode ─────────
+      - name: Start Next server
+        run: pnpm start -p 3000 &
+        env:                    # ← dummy runtime secrets so Next/Fn don't 500
+          DATABASE_URL: "postgresql://user:pw@localhost:5432/db"
+          NEXTAUTH_SECRET: "ci-secret"
+          RESEND_API_KEY: "dummy"
+          GOOGLE_CLIENT_ID: "dummy"
+          GOOGLE_CLIENT_SECRET: "dummy"
 
-      # ───────── Lighthouse CI ─────────
+      # Wait until server responds on port 3000
+      - run: npx wait-on http://localhost:3000 --timeout 60000
+
+      # ───────── Lighthouse  ─────────
       - name: Run Lighthouse CI
         run: pnpm dlx @lhci/cli@0.13.x autorun --config=./lighthouserc.json
