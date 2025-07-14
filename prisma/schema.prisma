@@ -60,8 +60,8 @@ model VerificationToken {
 
 /* ─────────── Booking domain ─────────── */
 
-/* A scheduled group class the gym offers */
-model Class {
+/* Renamed to avoid the JS keyword “class” */
+model GymClass {
   id        String   @id @default(cuid())
   title     String
   startAt   DateTime
@@ -72,7 +72,7 @@ model Class {
   bookings  Booking[]
 }
 
-/* A member’s reservation for a class */
+/* A member’s reservation */
 model Booking {
   id        String   @id @default(cuid())
   userId    String
@@ -80,6 +80,6 @@ model Booking {
   status    String   @default("CONFIRMED")
   createdAt DateTime @default(now())
 
-  user  User  @relation(fields: [userId], references: [id])
-  class Class @relation(fields: [classId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+  gymClass GymClass @relation(fields: [classId], references: [id])
 }

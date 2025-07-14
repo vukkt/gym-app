@@ -15,7 +15,6 @@ const team = [
     bio: 'Advanced strength cycles, designed by a world-renowned IPF silver-medalist.',
     photo: '/team/milan.jpg',
   },
-  ,
   {
     name: 'Maja Milenković',
     role: 'Yoga Lead · RYT-500',

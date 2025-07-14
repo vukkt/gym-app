@@ -25,6 +25,18 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  callbacks: {
+    /** Put the DB user.id on the JWT */
+    async jwt({ token, user }) {
+      if (user) token.id = user.id;
+      return token;
+    },
+    /** Expose it to the client session object */
+    async session({ session, token }) {
+      if (session.user && token.id) session.user.id = token.id;
+      return session;
+    },
+  },
   pages: { signIn: '/auth/signin' },
 };
 

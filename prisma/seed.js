@@ -2,9 +2,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  const start = Date.now();
-  await prisma.class.deleteMany(); // reset on dev
   await prisma.booking.deleteMany();
+  await prisma.gymClass.deleteMany();
 
   const now = new Date();
   const demo = [
@@ -27,7 +26,8 @@ async function main() {
       slots: 12,
     },
   ];
-  await prisma.class.createMany({ data: demo });
-  console.log(`Seeded ${demo.length} classes in ${Date.now() - start} ms`);
+  await prisma.gymClass.createMany({ data: demo });
+
+  console.log(`Seeded ${demo.length} classes`);
 }
 main().finally(() => prisma.$disconnect());
