@@ -7,6 +7,7 @@ import { resend } from '@/lib/resend';
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     EmailProvider({
       from: process.env.RESEND_FROM,
