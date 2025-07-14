@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSession, signIn, signOut } from 'next-auth/react';
+
 import Container from './Container';
-import HeroCTA from '@/components/HeroCTA';
 import ThemeToggle from '@/components/ThemeToggle';
-import FocusTrap from '@/components/FocusTrap'; // ← NEW
+import HeroCTA from '@/components/HeroCTA';
+import FocusTrap from '@/components/FocusTrap';
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -16,6 +18,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -32,6 +35,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  /* ---------------- render ---------------- */
   return (
     <header
       className={`sticky top-0 z-50 transition-shadow ${
@@ -57,13 +61,35 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop actions */}
+        {/* ───── Desktop actions ───── */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
+
+          {status === 'loading' ? null : session ? (
+            <>
+              <span className="text-sm text-gray-700 dark:text-gray-300">
+                Hi,&nbsp;{session.user?.name?.split(' ')[0] ?? 'member'}
+              </span>
+              <button
+                onClick={() => signOut()}
+                className="text-sm font-medium text-brand-600 hover:underline"
+              >
+                Sign&nbsp;out
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => signIn('google')}
+              className="text-sm font-medium text-brand-600 hover:underline"
+            >
+              Sign&nbsp;in
+            </button>
+          )}
+
           <HeroCTA />
         </div>
 
-        {/* Mobile actions: theme + menu */}
+        {/* ───── Mobile actions: theme + menu ───── */}
         <div className="md:hidden flex items-center gap-4">
           <ThemeToggle />
           <button
@@ -97,7 +123,7 @@ export default function Navbar() {
         </div>
       </Container>
 
-      {/* Mobile drawer */}
+      {/* ───── Mobile drawer ───── */}
       {open && (
         <div
           role="dialog"
@@ -117,6 +143,29 @@ export default function Navbar() {
                   {label}
                 </Link>
               ))}
+
+              {/* Auth & CTA */}
+              {status === 'loading' ? null : session ? (
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    signOut();
+                  }}
+                  className="text-left text-lg font-medium text-brand-600"
+                >
+                  Sign&nbsp;out
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    signIn('google');
+                  }}
+                  className="text-left text-lg font-medium text-brand-600"
+                >
+                  Sign&nbsp;in
+                </button>
+              )}
 
               <HeroCTA className="mt-4" onClick={() => setOpen(false)} />
             </nav>

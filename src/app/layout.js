@@ -6,6 +6,8 @@ import Analytics from '@/components/Analytics';
 import Footer from '@/components/Footer';
 import { ToastProvider } from '@/components/ToastProvider';
 import PageTransition from '@/components/PageTransition';
+import { SessionProvider } from 'next-auth/react';
+import AuthProvider from '@/components/AuthProvider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -54,14 +56,13 @@ export default function RootLayout({ children }) {
           src="https://assets.calendly.com/assets/external/widget.js"
           strategy="afterInteractive"
         />
-        <ToastProvider>
-          <Navbar />
-          <PageTransition>{children}</PageTransition>
-          <Analytics />
-          <Footer />
-        </ToastProvider>
-
-        {/* JSON-LD business schema */}
+        <AuthProvider>
+          <ToastProvider>
+            <Navbar /> <PageTransition>{children}</PageTransition>
+            <Analytics />
+            <Footer />
+          </ToastProvider>
+        </AuthProvider>
         <Script
           id="ld-localbusiness"
           type="application/ld+json"
