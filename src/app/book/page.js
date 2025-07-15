@@ -1,5 +1,6 @@
 import Section from '@/components/Section';
-import ClientBookWidget from '@/components/ClientBookWidget';
+import ClassesFetcher from '@/components/ClassesFetcher';
+import ScheduleGrid from '@/components/ScheduleGrid';
 
 export const metadata = {
   title: 'Book a Class',
@@ -9,19 +10,19 @@ export const metadata = {
 export default function BookPage() {
   return (
     <>
-      {/* Hero — constant brand blue, text always white */}
       <Section bg="bg-brand-500">
-        <div className="text-center space-y-6 text-white">
+        <div className="text-center text-white space-y-6">
           <h1 className="text-4xl sm:text-6xl font-extrabold">Book a Class</h1>
           <p className="max-w-xl mx-auto text-lg opacity-90">
             Choose a convenient time and lock in your free trial.
           </p>
         </div>
       </Section>
-
-      {/* Scheduler */}
-      <Section id="schedule" className="bg-gray-50 dark:bg-gray-800">
-        <ClientBookWidget />
+      {/* Native schedule */}
+      <Section id="schedule" className="bg-gray-50">
+        <ClassesFetcher>
+          {(classes) => <ScheduleGrid classes={classes} />}
+        </ClassesFetcher>
       </Section>
     </>
   );
