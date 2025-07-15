@@ -33,8 +33,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-sans antialiased">
-        {/* GA4 */}
+      <body className="font-sans antialiased flex min-h-screen flex-col">
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
           strategy="afterInteractive"
@@ -51,10 +50,11 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
-
         <AuthProvider>
           <ToastProvider>
-            <Navbar /> <PageTransition>{children}</PageTransition>
+            <main className="flex-1">
+              <Navbar /> <PageTransition>{children}</PageTransition>
+            </main>
             <Analytics />
             <Footer />
           </ToastProvider>

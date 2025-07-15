@@ -9,6 +9,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import HeroCTA from '@/components/HeroCTA';
 import FocusTrap from '@/components/FocusTrap';
 
+/* ---------- static nav links ---------- */
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/#about' },
@@ -17,7 +18,8 @@ const navLinks = [
   { label: 'Contact', href: '/#contact' },
 ];
 
-export default function NavbarClient({ initialSession }) {
+/* ---------- client component ---------- */
+function NavbarInner() {
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -27,7 +29,7 @@ export default function NavbarClient({ initialSession }) {
     document.body.style.overflow = open ? 'hidden' : '';
   }, [open]);
 
-  /* shadow after scrolling */
+  /* add shadow after small scroll */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4);
     onScroll();
@@ -35,8 +37,8 @@ export default function NavbarClient({ initialSession }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* ---------- UI ---------- */
-  const navbar = (
+  /* ---------- JSX ---------- */
+  return (
     <header
       className={`sticky top-0 z-50 transition-shadow ${
         scrolled ? 'shadow-md' : 'shadow-sm'
@@ -59,6 +61,14 @@ export default function NavbarClient({ initialSession }) {
               {label}
             </Link>
           ))}
+          {session && (
+            <Link
+              href="/account"
+              className="text-sm font-medium text-gray-700 hover:text-brand-600 dark:text-gray-300"
+            >
+              Account
+            </Link>
+          )}
         </nav>
 
         {/* Desktop actions */}
@@ -89,7 +99,7 @@ export default function NavbarClient({ initialSession }) {
           <HeroCTA />
         </div>
 
-        {/* Mobile actions: theme + menu */}
+        {/* Mobile actions */}
         <div className="md:hidden flex items-center gap-4">
           <ThemeToggle />
           <button
@@ -144,12 +154,22 @@ export default function NavbarClient({ initialSession }) {
                 </Link>
               ))}
 
-              {/* Auth & CTA */}
+              {session && (
+                <Link
+                  href="/account"
+                  className="text-lg font-medium text-gray-700 dark:text-gray-200"
+                  onClick={() => setOpen(false)}
+                >
+                  Account
+                </Link>
+              )}
+
+              {/* Auth */}
               {status === 'loading' ? null : session ? (
                 <button
                   onClick={() => {
-                    setOpen(false);
                     signOut();
+                    setOpen(false);
                   }}
                   className="text-left text-lg font-medium text-brand-600"
                 >
@@ -158,8 +178,8 @@ export default function NavbarClient({ initialSession }) {
               ) : (
                 <button
                   onClick={() => {
-                    setOpen(false);
                     signIn('google');
+                    setOpen(false);
                   }}
                   className="text-left text-lg font-medium text-brand-600"
                 >
@@ -174,7 +194,13 @@ export default function NavbarClient({ initialSession }) {
       )}
     </header>
   );
+}
 
-  /* Provide initialSession so SSR HTML already has correct state */
-  return <SessionProvider session={initialSession}>{navbar}</SessionProvider>;
+/* wrap with initialSession for immediate hydration parity */
+export default function NavbarClient({ initialSession }) {
+  return (
+    <SessionProvider session={initialSession}>
+      <NavbarInner />
+    </SessionProvider>
+  );
 }
