@@ -51,10 +51,7 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
-        <Script
-          src="https://assets.calendly.com/assets/external/widget.js"
-          strategy="afterInteractive"
-        />
+
         <AuthProvider>
           <ToastProvider>
             <Navbar /> <PageTransition>{children}</PageTransition>

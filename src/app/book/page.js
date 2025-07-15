@@ -19,7 +19,7 @@ export default function BookPage() {
         </div>
       </Section>
       {/* Native schedule */}
-      <Section id="schedule" className="bg-gray-50">
+      <Section id="schedule" className="bg-gray-50 dark:bg-gray-900">
         <ClassesFetcher>
           {(classes) => <ScheduleGrid classes={classes} />}
         </ClassesFetcher>
