@@ -1,45 +1,56 @@
-import { prisma } from '../src/lib/prisma.js';
+// prisma/seed.js
+import { PrismaClient, Role } from '@prisma/client';
+const prisma = new PrismaClient();
 
 async function main() {
-  // wipe old demo data
-  await prisma.booking.deleteMany({});
-  await prisma.gymClass.deleteMany({});
+  /* ---------- demo COACH user ---------- */
+  const coach = await prisma.user.upsert({
+    where: { email: 'coach@gym.xyz' },
+    update: { role: Role.COACH },
+    create: {
+      email: 'coach@gym.xyz',
+      name: 'Demo Coach',
+      role: Role.COACH,
+    },
+  });
+
+  /* ---------- wipe demo data ---------- */
+  await prisma.booking.deleteMany();
+  await prisma.gymClass.deleteMany();
 
   const now = new Date();
+  const plus = (min) => new Date(now.getTime() + min * 60_000);
 
-  // helper to add minutes
-  const plus = (n) => new Date(now.getTime() + n * 60000);
-
+  /* ---------- demo classes ---------- */
   await prisma.gymClass.createMany({
     data: [
       {
-        id: 'hiit-demo', // fixed ids for easy testing
+        id: 'hiit-demo',
         title: 'HIIT Blast',
-        startAt: plus(60), // 1 h from now
+        startAt: plus(60),
         duration: 45,
         slots: 10,
       },
       {
         id: 'power-demo',
         title: 'Powerlifting',
-        startAt: plus(120), // 2 h from now
+        startAt: plus(120),
         duration: 60,
         slots: 8,
       },
       {
         id: 'yoga-demo',
         title: 'Yoga Flex',
-        startAt: plus(180), // 3 h from now
+        startAt: plus(180),
         duration: 50,
         slots: 12,
       },
     ],
   });
+
+  console.log('Seed complete. Coach user id:', coach.id);
 }
 
 main()
-  .then(() => prisma.$disconnect())
-  .catch((e) => {
-    console.error(e);
-    prisma.$disconnect();
-  });
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

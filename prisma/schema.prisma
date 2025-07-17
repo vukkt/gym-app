@@ -7,7 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/* ─────────── Auth tables ─────────── */
+enum Role {
+  MEMBER
+  COACH
+  ADMIN
+}
 
 model User {
   id            String    @id @default(cuid())
@@ -15,6 +19,7 @@ model User {
   name          String?
   emailVerified DateTime?
   image         String?
+  role          Role     @default(MEMBER) 
   createdAt     DateTime  @default(now())
 
   accounts  Account[]
@@ -58,9 +63,7 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-/* ─────────── Booking domain ─────────── */
 
-/* Renamed to avoid the JS keyword “class” */
 model GymClass {
   id        String   @id @default(cuid())
   title     String
@@ -72,7 +75,6 @@ model GymClass {
   bookings  Booking[]
 }
 
-/* A member’s reservation */
 model Booking {
   id        String   @id @default(cuid())
   userId    String
