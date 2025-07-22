@@ -17,29 +17,17 @@ jobs:
           node-version: 18
           cache: 'pnpm'
 
-      # Debugging steps (temporarily add these to confirm your path)
-      # Output confirmed that pnpm-lock.yaml is at the repository root.
-      - name: Show current working directory
-        run: pwd
-      - name: List files in current directory
-        run: ls -la
-      - name: Recursively list all pnpm-lock.yaml files
-        run: find . -name "pnpm-lock.yaml"
-
       # ───────── Install ─────────
       - name: Install dependencies with pnpm
-        run: pnpm install --no-frozen-lockfile # Changed from --frozen-lockfile to --no-frozen-lockfile
-        # Removed 'working-directory' as pnpm-lock.yaml is at the repository root.
+        run: pnpm install --no-frozen-lockfile
 
       # ───────── Build ─────────
       - name: Build project
         run: pnpm build
-        # Removed 'working-directory' as the build command should run from the repository root.
 
       # ───────── Serve in prod mode ─────────
       - name: Start production server in background
         run: pnpm start -p 3000 &
-        # Removed 'working-directory' as the start command should run from the repository root.
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
@@ -47,9 +35,8 @@ jobs:
 
       # Wait until server responds on port 3000
       - name: Wait for server to boot
-        run: npx wait-on http://localhost:3000
+        run: npx wait-on http://localhost:3000 --timeout 120000 # Added 2-minute timeout
 
       # ───────── Run E2E tests ─────────
       - name: Run E2E tests
         run: pnpm e2e:ci
-        # Removed 'working-directory' as the e2e:ci command should run from the repository root.
