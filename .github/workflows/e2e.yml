@@ -1,4 +1,3 @@
-# .github/workflows/e2e.yml
 name: E2E
 
 on: [push, pull_request]
