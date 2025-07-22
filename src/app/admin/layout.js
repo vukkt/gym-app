@@ -1,5 +1,4 @@
 import NavbarServer from '@/components/NavbarServer';
-import '@/styles/admin.css'; // optional scoped styles
 
 export const metadata = { title: 'Admin • Gym XYZ' };
 
