@@ -86,17 +86,21 @@ function NavbarInner() {
               >
                 Sign&nbsp;out
               </button>
+              {/* Show "Book a Class" for logged-in users */}
+              <HeroCTA>Book a Class</HeroCTA>
             </>
           ) : (
-            <button
-              onClick={() => signIn('google')}
-              className="text-sm font-medium text-brand-600 hover:underline"
-            >
-              Sign&nbsp;in
-            </button>
+            <>
+              <button
+                onClick={() => signIn('google')}
+                className="text-sm font-medium text-brand-600 hover:underline"
+              >
+                Sign&nbsp;in
+              </button>
+              {/* Show "Book Your First Class" for non-logged-in users */}
+              <HeroCTA />
+            </>
           )}
-
-          <HeroCTA />
         </div>
 
         {/* Mobile actions */}
@@ -166,28 +170,36 @@ function NavbarInner() {
 
               {/* Auth */}
               {status === 'loading' ? null : session ? (
-                <button
-                  onClick={() => {
-                    signOut();
-                    setOpen(false);
-                  }}
-                  className="text-left text-lg font-medium text-brand-600"
-                >
-                  Sign&nbsp;out
-                </button>
+                <>
+                  <button
+                    onClick={() => {
+                      signOut();
+                      setOpen(false);
+                    }}
+                    className="text-left text-lg font-medium text-brand-600"
+                  >
+                    Sign&nbsp;out
+                  </button>
+                  {/* Show "Book a Class" for logged-in users in mobile */}
+                  <HeroCTA className="mt-4" onClick={() => setOpen(false)}>
+                    Book a Class
+                  </HeroCTA>
+                </>
               ) : (
-                <button
-                  onClick={() => {
-                    signIn('google');
-                    setOpen(false);
-                  }}
-                  className="text-left text-lg font-medium text-brand-600"
-                >
-                  Sign&nbsp;in
-                </button>
+                <>
+                  <button
+                    onClick={() => {
+                      signIn('google');
+                      setOpen(false);
+                    }}
+                    className="text-left text-lg font-medium text-brand-600"
+                  >
+                    Sign&nbsp;in
+                  </button>
+                  {/* Show "Book Your First Class" for non-logged-in users in mobile */}
+                  <HeroCTA className="mt-4" onClick={() => setOpen(false)} />
+                </>
               )}
-
-              <HeroCTA className="mt-4" onClick={() => setOpen(false)} />
             </nav>
           </FocusTrap>
         </div>
