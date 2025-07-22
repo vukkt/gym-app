@@ -17,17 +17,38 @@ jobs:
           node-version: 18
           cache: 'pnpm'
 
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      # Debugging steps (temporarily add these to confirm your path)
+      - name: Show current working directory
+        run: pwd
+      - name: List files in current directory
+        run: ls -la
+      - name: Recursively list all pnpm-lock.yaml files
+        run: find . -name "pnpm-lock.yaml"
 
-      # Start production server in background
-      - run: pnpm start -p 3000 &
+      # ───────── Install ─────────
+      - name: Install dependencies with pnpm (frozen)
+        run: pnpm install --frozen-lockfile
+        working-directory: ./client # <-- IMPORTANT: Replace './client' with the actual path to your project's root!
+
+      # ───────── Build ─────────
+      - name: Build project
+        run: pnpm build
+        working-directory: ./client # <-- IMPORTANT: Apply working-directory to all pnpm commands
+
+      # ───────── Serve in prod mode ─────────
+      - name: Start production server in background
+        run: pnpm start -p 3000 &
+        working-directory: ./client # <-- IMPORTANT: Apply working-directory if 'start' is also in this dir
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           # …whatever else you need
 
-      # Wait a few seconds for server to boot
-      - run: npx wait-on http://localhost:3000
+      # Wait until server responds on port 3000
+      - name: Wait for server to boot
+        run: npx wait-on http://localhost:3000
 
-      - run: pnpm e2e:ci
+      # ───────── Run E2E tests ─────────
+      - name: Run E2E tests
+        run: pnpm e2e:ci
+        working-directory: ./client # <-- IMPORTANT: Apply working-directory if 'e2e:ci' is also in this dir
