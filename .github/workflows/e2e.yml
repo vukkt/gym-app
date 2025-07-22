@@ -12,14 +12,13 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-      - uses: actions/setup-node@v4 # <-- CORRECTED INDENTATION HERE
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'pnpm'
 
       # Debugging steps (temporarily add these to confirm your path)
-      # IMPORTANT: Check the output of these steps in your CI logs to find the correct 'working-directory' path.
-      # The 'find' command will tell you the exact path to your pnpm-lock.yaml.
+      # Output confirmed that pnpm-lock.yaml is at the repository root.
       - name: Show current working directory
         run: pwd
       - name: List files in current directory
@@ -30,22 +29,17 @@ jobs:
       # ───────── Install ─────────
       - name: Install dependencies with pnpm (frozen)
         run: pnpm install --frozen-lockfile
-        # <-- IMPORTANT: Replace './client' with the actual path to your project's root!
-        # For example, if 'find' shows './frontend/pnpm-lock.yaml', use './frontend'.
-        # If it shows './pnpm-lock.yaml', you can remove the 'working-directory' line or use '.'
-        working-directory: ./client # <-- UPDATE THIS LINE
+        # Removed 'working-directory' as pnpm-lock.yaml is at the repository root.
 
       # ───────── Build ─────────
       - name: Build project
         run: pnpm build
-        # <-- IMPORTANT: Apply working-directory to all pnpm commands
-        working-directory: ./client # <-- UPDATE THIS LINE
+        # Removed 'working-directory' as the build command should run from the repository root.
 
       # ───────── Serve in prod mode ─────────
       - name: Start production server in background
         run: pnpm start -p 3000 &
-        # <-- IMPORTANT: Apply working-directory if 'start' is also in this dir
-        working-directory: ./client # <-- UPDATE THIS LINE
+        # Removed 'working-directory' as the start command should run from the repository root.
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
@@ -58,5 +52,4 @@ jobs:
       # ───────── Run E2E tests ─────────
       - name: Run E2E tests
         run: pnpm e2e:ci
-        # <-- IMPORTANT: Apply working-directory if 'e2e:ci' is also in this dir
-        working-directory: ./client # <-- UPDATE THIS LINE
+        # Removed 'working-directory' as the e2e:ci command should run from the repository root.
