@@ -1,42 +1,85 @@
-# .github/workflows/e2e.yml
-name: E2E
+name: Cypress E2E Tests
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches: [main, dev]
 
 jobs:
   cypress:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
+      # pnpm + Node (same as your Lighthouse CI)
       - uses: pnpm/action-setup@v2
         with:
           version: 8
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 18 # Or your preferred Node.js version
           cache: 'pnpm'
 
-      # ───────── Install ─────────
-      - name: Install dependencies with pnpm
-        run: pnpm install --no-frozen-lockfile
+      # ───────── Install Dependencies ─────────
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile # Or just `pnpm install` if you don't use frozen-lockfile
 
-      # ───────── Build ─────────
-      - name: Build project
+      # ───────── Build Application (Crucial for `pnpm start`) ─────────
+      - name: Build application
         run: pnpm build
 
-      # ───────── Serve in prod mode ─────────
-      - name: Start production server in background
-        run: pnpm start -p 3000 &
+      # ───────── Serve in production mode ─────────
+      - name: Start Next.js server for E2E tests
+        run: pnpm start -p 3000 & # Start the server in the background
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          # …whatever else you need
+          # Add any necessary environment variables for your Next.js app to run in CI
+          DATABASE_URL: "postgresql://user:pw@localhost:5432/db" # Example dummy values
+          NEXTAUTH_SECRET: "ci-secret"
+          RESEND_API_KEY: "dummy"
+          GOOGLE_CLIENT_ID: "dummy"
+          GOOGLE_CLIENT_SECRET: "dummy"
+          # ... any other env vars your app needs to start successfully
 
       # Wait until server responds on port 3000
-      - name: Wait for server to boot
-        run: npx wait-on http://localhost:3000 --timeout 120000 # Added 2-minute timeout
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:3000 --timeout 120000 # Increased timeout to 2 minutes (120,000 ms) as a general good practice for E2E
 
-      # ───────── Run E2E tests ─────────
-      - name: Run E2E tests
-        run: pnpm e2e:ci
+      # ───────── Run Cypress Tests ─────────
+      - name: Cypress run
+        uses: cypress-io/github-action@v6 # Using the official Cypress GitHub Action
+        with:
+          start: npm start # This is often used if Cypress should start your server for you, but we already did that.
+                           # Alternatively, you can remove 'start' and just ensure baseUrl is set correctly.
+                           # Given we explicitly started and waited, you might just need `browser: chrome` and `spec: 'cypress/e2e/**/*.cy.js'` etc.
+                           # Let's adjust this for clarity.
+
+      # --- REVISED CYPRESS RUN STEP ---
+      - name: Run Cypress E2E tests
+        run: pnpm cypress run # Assuming you have `cypress` or `cypress run` as a script in package.json
+        # Or if you use `npx`: `npx cypress run`
+        # Make sure your cypress.config.js points to baseUrl: 'http://localhost:3000'
+        # Example for `cypress.config.js`:
+        # const { defineConfig } = require('cypress');
+        # module.exports = defineConfig({
+        #   e2e: {
+        #     baseUrl: 'http://localhost:3000',
+        #     setupNodeEvents(on, config) {
+        #       // implement node event listeners here
+        #     },
+        #   },
+        # });
+
+      # If you want to capture screenshots/videos on failure (recommended)
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-videos
+          path: cypress/videos
