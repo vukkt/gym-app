@@ -70,3 +70,6 @@ body {
     scroll-behavior: auto !important;
   }
 }
+.scroll-auto {
+  scroll-behavior: auto;
+}

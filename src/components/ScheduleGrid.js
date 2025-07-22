@@ -7,7 +7,6 @@ export default function ScheduleGrid({ classes: initial }) {
   const [classes, setClasses] = useState(initial);
   const toast = useToast();
 
-  /* ── Fallback: no upcoming sessions ─────────────────────────── */
   if (classes.length === 0) {
     return (
       <p className="text-center text-gray-500">
@@ -15,7 +14,6 @@ export default function ScheduleGrid({ classes: initial }) {
       </p>
     );
   }
-  /* ───────────────────────────────────────────────────────────── */
 
   async function reserve(classId) {
     const res = await fetch('/api/bookings', {
@@ -26,13 +24,13 @@ export default function ScheduleGrid({ classes: initial }) {
 
     if (res.status === 201) {
       toast.success('Booking confirmed!');
-      setClasses((list) =>
-        list.map((c) =>
-          c.id === classId ? { ...c, available: c.available - 1 } : c
+      setClasses((c) =>
+        c.map((cl) =>
+          cl.id === classId ? { ...cl, available: cl.available - 1 } : cl
         )
       );
     } else if (res.status === 401) {
-      signIn('google'); // prompts login
+      signIn('google');
     } else {
       const { error } = await res.json();
       toast.error(error ?? 'Something went wrong');
@@ -40,7 +38,7 @@ export default function ScheduleGrid({ classes: initial }) {
   }
 
   return (
-    <ul className="divide-y">
+    <ul className="divide-y" role="list">
       {classes.map((c) => (
         <li key={c.id} className="py-4 flex items-center justify-between">
           <span>
@@ -55,11 +53,12 @@ export default function ScheduleGrid({ classes: initial }) {
           </span>
 
           <button
+            data-testid={`reserve-${c.id}`}
+            className="rounded-xl px-4 py-2 text-sm font-semibold
+                       bg-brand-500 hover:bg-brand-700 text-white
+                       disabled:opacity-40"
             disabled={!c.available}
             onClick={() => reserve(c.id)}
-            className="rounded-xl px-4 py-2 text-sm font-semibold
-                       bg-brand-500 hover:bg-brand-700
-                       text-white disabled:opacity-40"
           >
             {c.available ? 'Reserve' : 'Full'}
           </button>

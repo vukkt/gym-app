@@ -1,0 +1,33 @@
+# .github/workflows/e2e.yml
+name: E2E
+
+on: [push, pull_request]
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+      # Start production server in background
+      - run: pnpm start -p 3000 &
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          # …whatever else you need
+
+      # Wait a few seconds for server to boot
+      - run: npx wait-on http://localhost:3000
+
+      - run: pnpm e2e:ci
