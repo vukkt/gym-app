@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # pnpm + Node (same as your Lighthouse CI)
+      # pnpm + Node
       - uses: pnpm/action-setup@v2
         with:
           version: 8
@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile # Or just `pnpm install` if you don't use frozen-lockfile
 
-      # ───────── Build Application (Crucial for `pnpm start`) ─────────
+      # ───────── Build Application ─────────
       - name: Build application
         run: pnpm build
 
@@ -44,32 +44,33 @@ jobs:
 
       # Wait until server responds on port 3000
       - name: Wait for server to be ready
-        run: npx wait-on http://localhost:3000 --timeout 120000 # Increased timeout to 2 minutes (120,000 ms) as a general good practice for E2E
+        run: npx wait-on http://localhost:3000 --timeout 120000
 
       # ───────── Run Cypress Tests ─────────
       - name: Cypress run
-        uses: cypress-io/github-action@v6 # Using the official Cypress GitHub Action
+        uses: cypress-io/github-action@v6
         with:
-          start: npm start # This is often used if Cypress should start your server for you, but we already did that.
-                           # Alternatively, you can remove 'start' and just ensure baseUrl is set correctly.
-                           # Given we explicitly started and waited, you might just need `browser: chrome` and `spec: 'cypress/e2e/**/*.cy.js'` etc.
-                           # Let's adjust this for clarity.
-
-      # --- REVISED CYPRESS RUN STEP ---
-      - name: Run Cypress E2E tests
-        run: pnpm cypress run # Assuming you have `cypress` or `cypress run` as a script in package.json
-        # Or if you use `npx`: `npx cypress run`
-        # Make sure your cypress.config.js points to baseUrl: 'http://localhost:3000'
-        # Example for `cypress.config.js`:
-        # const { defineConfig } = require('cypress');
-        # module.exports = defineConfig({
-        #   e2e: {
-        #     baseUrl: 'http://localhost:3000',
-        #     setupNodeEvents(on, config) {
-        #       // implement node event listeners here
-        #     },
-        #   },
-        # });
+          # --- KEY FIXES HERE ---
+          # 1. We already installed pnpm dependencies in 'Install dependencies' step.
+          #    However, the cypress-io action expects to potentially run an install command.
+          #    Since pnpm install handles the cypress package, we just need to ensure
+          #    the binary is available.
+          # 2. To ensure the Cypress binary is installed/verified, we can use the `install-command`
+          #    to run `pnpm install` again or more specifically `npx cypress install`.
+          #    The action typically runs `npm install` by default, which is wrong for pnpm.
+          #    Setting an explicit `install-command` helps.
+          # 3. Cache path for Cypress binary needs to be handled by the cypress-io action itself.
+          #    It usually handles its own caching for the binary, so no separate `actions/cache` for Cypress is needed.
+          install-command: pnpm install # Tells Cypress action to use pnpm for installation
+          build: pnpm build # Not strictly necessary if you build in a prior step, but harmless
+          start: pnpm start -p 3000 # This will run in the background by the Cypress action.
+                                    # REMOVED `&` here because the `start` option of the action handles backgrounding.
+                                    # This also allows the action to gracefully shut down the server.
+          wait-on: 'http://localhost:3000' # Cypress action has its own `wait-on` parameter
+          wait-on-timeout: 120 # In seconds, matches your 120000ms
+          # The rest of your Cypress options, e.g.:
+          browser: chrome
+          # spec: './cypress/e2e/**/*.cy.js' # Uncomment and adjust if you need specific specs
 
       # If you want to capture screenshots/videos on failure (recommended)
       - uses: actions/upload-artifact@v4
