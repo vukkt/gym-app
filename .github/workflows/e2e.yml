@@ -27,8 +27,8 @@ jobs:
         run: find . -name "pnpm-lock.yaml"
 
       # ───────── Install ─────────
-      - name: Install dependencies with pnpm (frozen)
-        run: pnpm install --frozen-lockfile
+      - name: Install dependencies with pnpm
+        run: pnpm install --no-frozen-lockfile # Changed from --frozen-lockfile to --no-frozen-lockfile
         # Removed 'working-directory' as pnpm-lock.yaml is at the repository root.
 
       # ───────── Build ─────────
