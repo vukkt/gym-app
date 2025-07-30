@@ -86,20 +86,17 @@ function NavbarInner() {
               >
                 Sign&nbsp;out
               </button>
-              {/* Show "Book a Class" for logged-in users */}
+              {/* Logged-in CTA */}
               <HeroCTA>Book a Class</HeroCTA>
             </>
           ) : (
-            <>
-              <button
-                onClick={() => signIn('google')}
-                className="text-sm font-medium text-brand-600 hover:underline"
-              >
-                Sign&nbsp;in
-              </button>
-              {/* Show "Book Your First Class" for non-logged-in users */}
-              <HeroCTA />
-            </>
+            /* 👇 Only “Sign in” button — CTA removed */
+            <button
+              onClick={() => signIn('google')}
+              className="text-sm font-medium text-brand-600 hover:underline"
+            >
+              Sign&nbsp;in
+            </button>
           )}
         </div>
 
@@ -180,25 +177,22 @@ function NavbarInner() {
                   >
                     Sign&nbsp;out
                   </button>
-                  {/* Show "Book a Class" for logged-in users in mobile */}
+                  {/* Logged-in CTA */}
                   <HeroCTA className="mt-4" onClick={() => setOpen(false)}>
                     Book a Class
                   </HeroCTA>
                 </>
               ) : (
-                <>
-                  <button
-                    onClick={() => {
-                      signIn('google');
-                      setOpen(false);
-                    }}
-                    className="text-left text-lg font-medium text-brand-600"
-                  >
-                    Sign&nbsp;in
-                  </button>
-                  {/* Show "Book Your First Class" for non-logged-in users in mobile */}
-                  <HeroCTA className="mt-4" onClick={() => setOpen(false)} />
-                </>
+                /* 👇 Only “Sign in” — CTA removed */
+                <button
+                  onClick={() => {
+                    signIn('google');
+                    setOpen(false);
+                  }}
+                  className="text-left text-lg font-medium text-brand-600"
+                >
+                  Sign&nbsp;in
+                </button>
               )}
             </nav>
           </FocusTrap>
