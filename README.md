@@ -1,39 +1,82 @@
-# Gym App 🏋️‍♂️
+# Gym App
 
-A fast, mobile-first gym website built with Next.js 14 and Tailwind CSS. This modern 5-page site is designed to help gyms and fitness centers book classes, collect leads, and track analytics effectively.
+A full-stack gym management web application built with Next.js 15. Supports class scheduling, booking, role-based access, and email authentication — designed for gyms to manage members, coaches, and classes from a single platform.
 
-## 🚀 Features
+---
 
-- **Modern Tech Stack**: Built with Next.js 14 App Router and Tailwind CSS
-- **Mobile-First Design**: Optimized for all devices with responsive layouts
-- **Class Booking System**: Calendly-ready booking integration
-- **Lead Generation**: Contact forms with validation for member acquisition
-- **Analytics Ready**: Google Analytics 4 integration for page and event tracking
-- **Performance Optimized**: Next.js image optimizations and best practices
-- **Form Validation**: React Hook Form with Zod schema validation
+## Features
 
-## 📱 Pages Overview
+- **Authentication** — Google OAuth and magic-link email sign-in via NextAuth.js and Resend
+- **Role-based access** — Three roles: `MEMBER`, `COACH`, and `ADMIN`, each with scoped views and permissions
+- **Class booking** — Members can browse and book gym classes with real-time slot availability
+- **Coach portal** — Coaches can view and manage classes assigned to them
+- **Admin panel** — Full CRUD control over classes, including creating, editing, and deleting
+- **Contact form** — Lead generation form with validation via React Hook Form and Zod
+- **Animations** — Smooth page transitions and scroll reveals powered by Framer Motion
+- **Analytics** — Google Analytics 4 integration for page views and custom events
+- **PWA ready** — Progressive Web App support via next-pwa
+- **SEO** — Dynamic sitemap and robots.txt routes
 
-| Page    | Purpose                                                     |
-| ------- | ----------------------------------------------------------- |
-| `/`     | Hero section, About, Classes, Membership plans, and Contact |
-| `/book` | Class booking interface (Calendly integration ready)        |
+---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Framework**: Next.js 14 (App Router, JavaScript)
-- **Styling**: Tailwind CSS
-- **Forms**: React Hook Form + Zod validation
-- **Images**: Next.js Image component for optimization
-- **Analytics**: Google Analytics 4
-- **Package Manager**: pnpm
+| Layer           | Technology                              |
+| --------------- | --------------------------------------- |
+| Framework       | Next.js 15 (App Router, JavaScript)     |
+| Styling         | Tailwind CSS                            |
+| Database        | PostgreSQL via Prisma ORM               |
+| Auth            | NextAuth.js (Google + Email/Magic Link) |
+| Email           | Resend                                  |
+| Forms           | React Hook Form + Zod                   |
+| Animations      | Framer Motion                           |
+| Notifications   | React Hot Toast                         |
+| Testing         | Jest + Cypress                          |
+| Linting         | ESLint + Prettier + Husky + lint-staged |
+| Package Manager | pnpm                                    |
 
-## 🏃‍♂️ Quick Start
+---
+
+## Project Structure
+
+```
+gym-app/
+├── prisma/
+│   ├── schema.prisma        # Database schema (User, GymClass, Booking)
+│   └── seed.js              # Database seeding script
+├── src/
+│   ├── app/
+│   │   ├── page.js          # Homepage (Hero, About, Classes, Membership, Contact)
+│   │   ├── book/            # Class booking page
+│   │   ├── coach/           # Coach dashboard
+│   │   ├── account/         # Member account page
+│   │   ├── api/
+│   │   │   ├── auth/        # NextAuth route handler
+│   │   │   ├── bookings/    # Booking API
+│   │   │   ├── classes/     # Public classes API
+│   │   │   ├── contact/     # Contact form API
+│   │   │   └── admin/       # Admin class management API
+│   │   ├── sitemap.xml/     # Dynamic sitemap
+│   │   └── robots.txt/      # Dynamic robots.txt
+│   ├── components/
+│   │   ├── sections/        # Page sections (Hero, About, Classes, etc.)
+│   │   └── ...              # Shared UI components
+│   ├── hooks/               # Custom React hooks
+│   └── lib/                 # Auth, Prisma client, analytics helpers
+├── cypress/                 # End-to-end tests
+├── tests/                   # Unit tests
+└── public/                  # Static assets
+```
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
 - Node.js 18+
-- pnpm (recommended) or npm
+- pnpm
+- PostgreSQL database
 
 ### Installation
 
@@ -50,128 +93,110 @@ A fast, mobile-first gym website built with Next.js 14 and Tailwind CSS. This mo
    pnpm install
    ```
 
-3. **Set up environment variables**
+3. **Configure environment variables**
 
-   ```bash
-   cp .env.local.example .env.local
-   ```
-
-   Add your Google Analytics ID to `.env.local`:
+   Create a `.env.local` file in the root:
 
    ```env
-   NEXT_PUBLIC_GA_ID=your_ga_tracking_id_here
+   # Database
+   DATABASE_URL=postgresql://user:password@localhost:5432/gymapp
+
+   # NextAuth
+   NEXTAUTH_URL=http://localhost:3000
+   NEXTAUTH_SECRET=your_secret_here
+
+   # Google OAuth
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+   # Resend (email)
+   RESEND_API_KEY=your_resend_api_key
+   RESEND_FROM=noreply@yourdomain.com
+
+   # Google Analytics
+   NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
    ```
 
-4. **Start the development server**
+4. **Set up the database**
+
+   ```bash
+   pnpm prisma migrate dev
+   pnpm prisma db seed
+   ```
+
+5. **Start the development server**
 
    ```bash
    pnpm dev
    ```
 
-5. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-## 📊 Analytics Setup
-
-This app comes with Google Analytics 4 integration. To enable tracking:
-
-1. Create a GA4 property in Google Analytics
-2. Copy your Measurement ID (format: G-XXXXXXXXXX)
-3. Add it to your `.env.local` file as `NEXT_PUBLIC_GA_ID`
-
-The app tracks both page views and custom events for better insights into user behavior.
-
-## 🎨 Customization
-
-### Styling
-
-The app uses Tailwind CSS for styling. You can customize:
-
-- Colors in `tailwind.config.js`
-- Components in the `/components` directory
-- Global styles in `/styles/globals.css`
-
-### Content
-
-Update gym-specific content in:
-
-- Hero section text and images
-- Class schedules and descriptions
-- Membership plans and pricing
-- Contact information
-
-### Booking Integration
-
-The `/book` page is ready for Calendly integration. Simply:
-
-1. Create your Calendly account
-2. Replace the placeholder with your Calendly embed code
-3. Customize the booking flow as needed
-
-## 📂 Project Structure
-
-```
-gym-app/
-├── app/                 # Next.js 14 App Router
-│   ├── page.js         # Homepage
-│   ├── book/           # Booking page
-│   └── layout.js       # Root layout
-├── components/         # Reusable components
-├── public/            # Static assets
-├── styles/            # Global styles
-├── .env.local.example # Environment variables template
-└── tailwind.config.js # Tailwind configuration
-```
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy automatically
-
-### Other Platforms
-
-This Next.js app can be deployed to any platform supporting Node.js:
-
-- Netlify
-- Railway
-- DigitalOcean App Platform
-- AWS Amplify
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🙋‍♂️ Support
-
-If you have any questions or need help setting up the project, please:
-
-- Open an issue on GitHub
-- Check the Next.js documentation for framework-specific questions
-- Refer to Tailwind CSS docs for styling help
-
-## 🎯 Roadmap
-
-- [ ] Payment integration for membership plans
-- [ ] Member dashboard and profiles
-- [ ] Class scheduling system
-- [ ] Trainer profiles and booking
-- [ ] Mobile app development
-- [ ] Advanced analytics dashboard
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-**Built with ❤️ for the fitness community**
+## Scripts
+
+| Command         | Description                         |
+| --------------- | ----------------------------------- |
+| `pnpm dev`      | Start development server            |
+| `pnpm build`    | Build for production                |
+| `pnpm start`    | Start production server             |
+| `pnpm test`     | Run unit tests with Jest            |
+| `pnpm e2e`      | Open Cypress for end-to-end testing |
+| `pnpm e2e:ci`   | Run Cypress headlessly in CI        |
+| `pnpm lint`     | Lint with ESLint                    |
+| `pnpm lint:fix` | Auto-fix lint errors                |
+| `pnpm format`   | Format all files with Prettier      |
+
+---
+
+## Data Model
+
+```
+User         — id, email, name, role (MEMBER | COACH | ADMIN)
+GymClass     — id, title, startAt, duration, slots
+Booking      — id, userId, classId, status
+Account      — NextAuth OAuth account linkage
+Session      — NextAuth session management
+```
+
+---
+
+## Roles & Permissions
+
+| Feature               | Member | Coach | Admin |
+| --------------------- | :----: | :---: | :---: |
+| Browse classes        |   ✓    |   ✓   |   ✓   |
+| Book a class          |   ✓    |       |       |
+| View own bookings     |   ✓    |   ✓   |   ✓   |
+| Manage own classes    |        |   ✓   |   ✓   |
+| Create/delete classes |        |       |   ✓   |
+
+---
+
+## Deployment
+
+This app is optimized for deployment on [Vercel](https://vercel.com):
+
+1. Push your code to GitHub
+2. Import the repository in Vercel
+3. Add all environment variables from `.env.local` in the Vercel dashboard
+4. Deploy
+
+For other platforms (Railway, Render, DigitalOcean), ensure your environment supports Node.js 18+ and has a reachable PostgreSQL instance.
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'feat: add your feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+---
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
